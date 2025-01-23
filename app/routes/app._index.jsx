@@ -13,29 +13,11 @@ import {
   InlineStack,
 } from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
-import { authenticate, unauthenticated } from "../shopify.server";
+import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }) => {
-  const { storefront } = await unauthenticated.storefront(
-    "miavai649.myshopify.com",
-  );
-
-  const response = await storefront.graphql(
-    `#graphql
-  query products {
-    products(first: 3) {
-      edges {
-        node {
-          id
-          title
-        }
-      }
-    }
-  }`,
-  );
-
-  const data = await response.json();
-  return data;
+  const { session, redirect } = await authenticate.admin(request);
+  return redirect("/app/amar");
 };
 
 export const action = async ({ request }) => {

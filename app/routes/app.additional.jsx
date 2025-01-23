@@ -1,9 +1,24 @@
 import { Box, Page, Button, InlineGrid, Card, Text } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { useState } from "react";
-import { useSubmit, useActionData, useLoaderData } from "@remix-run/react";
+import { useSubmit, useLoaderData } from "@remix-run/react";
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
+
+// loader function
+export async function loader({ request }) {
+  const { session } = await authenticate.admin(request);
+  const res = await db.session.findUnique({
+    where: {
+      id: session.id,
+    },
+    select: {
+      products: true,
+    },
+  });
+
+  return JSON.parse(res.products);
+}
 
 // action function
 export async function action({ request }) {
@@ -22,25 +37,11 @@ export async function action({ request }) {
   });
 }
 
-export async function loader({ request }) {
-  const { session } = await authenticate.admin(request);
-  const res = await db.session.findUnique({
-    where: {
-      id: session.id,
-    },
-    select: {
-      products: true,
-    },
-  });
-
-  return JSON.parse(res.products);
-}
-
 export default function AdditionalPage() {
   const [products, setProducts] = useState([]);
-  const actionData = useActionData();
 
   const data = useLoaderData();
+  console.log("🚀 ~ AdditionalPage ~ data:", data[0]?.variants[0]);
 
   const submit = useSubmit();
 

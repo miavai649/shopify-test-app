@@ -1,34 +1,52 @@
-import { Page } from "@shopify/polaris";
+import { Page, Text } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }) => {
-  const { storefront, liquid } = await authenticate.public.appProxy(request);
+  const { admin } = await authenticate.admin(request);
 
-  if (!storefront) {
-    return new Response();
-  }
-
-  const response = await storefront.graphql(
+  const response = await admin.graphql(
     `#graphql
-    query productTitle {
-      products(first: 1) {
-        nodes {
-          title
-        }
+  mutation StorefrontAccessTokenCreate($input: StorefrontAccessTokenInput!) {
+    storefrontAccessTokenCreate(input: $input) {
+      userErrors {
+        field
+        message
       }
-    }`,
+      shop {
+        id
+      }
+      storefrontAccessToken {
+        accessScopes {
+          handle
+        }
+        accessToken
+        title
+      }
+    }
+  }`,
+    {
+      variables: {
+        input: {
+          title: "New Storefront Access Token",
+        },
+      },
+    },
   );
-  const body = await response.json();
 
-  const title = body.data.products.nodes[0].title;
-
-  return title;
+  const data = await response.json();
+  console.log(
+    "🚀 ~ loader ~ storefrontAccessToken:",
+    data?.data?.storefrontAccessTokenCreate?.storefrontAccessToken,
+  );
+  return data;
 };
 
-export default function AmarPage() {
+export default function Amar() {
   return (
     <Page>
-      <h1>hello world</h1>
+      <Text as="span" variant="bodyMd">
+        Framework
+      </Text>
     </Page>
   );
 }

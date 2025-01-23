@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "c86513012ffdcced8b86c752338e43e1"
-application_url = "https://magnet-musician-pct-valued.trycloudflare.com"
+application_url = "https://at-bronze-wayne-gzip.trycloudflare.com"
 embedded = true
 name = "test-app"
 handle = "test-app-11240"
@@ -28,9 +28,9 @@ scopes = "unauthenticated_read_checkouts,unauthenticated_read_product_listings,u
 
 [auth]
 redirect_urls = [
-  "https://magnet-musician-pct-valued.trycloudflare.com/auth/callback",
-  "https://magnet-musician-pct-valued.trycloudflare.com/auth/shopify/callback",
-  "https://magnet-musician-pct-valued.trycloudflare.com/api/auth/callback"
+  "https://at-bronze-wayne-gzip.trycloudflare.com/auth/callback",
+  "https://at-bronze-wayne-gzip.trycloudflare.com/auth/shopify/callback",
+  "https://at-bronze-wayne-gzip.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
